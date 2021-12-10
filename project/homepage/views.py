@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from .models import Menu
 from homepage.models import Category,Product
+from django.core.paginator import Paginator,EmptyPage,InvalidPage
 
 
 
@@ -67,8 +68,20 @@ def menu(request,category_slug=None):
         products = Product.objects.all().filter(category=category_page,available=True)
     else:
         products = Product.objects.all().filter(available=True)
+    
+    #n / 12 = หน้า
+    paginator=Paginator(products,4)
+    try:
+        page=int(request.GET.get('page','1'))
+    except:
+        page=1
+
+    try:
+        productperPage=paginator.page(page)
+    except (EmptyPage,InvalidPage):
+        productperPage=paginator.page(paginator.num_pages)
         
-    return render(request,'menu.html',{'products' : products,'category':category_page})
+    return render(request,'menu.html',{'products' : productperPage,'category':category_page})
 
 def registerForm(request): 
     return render(request,'register.html')
