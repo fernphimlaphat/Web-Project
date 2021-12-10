@@ -25,6 +25,8 @@ urlpatterns = [
     path('',include('homepage.urls')),
     path('index/',include('homepage.urls')),
     path('menu/',include('homepage.urls')),
+    path('',views.menu,name="AllMenu"),
+    path('category/<slug:category_slug>',views.menu,name="product_by_category"),
     path('registerForm/',include('homepage.urls')),
     path('addUser',include('homepage.urls')),
     path('loginForm/',include('homepage.urls')),
@@ -40,5 +42,5 @@ urlpatterns = [
 
 if settings.DEBUG :
     urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
-    urlpatterns+=static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
+    urlpatterns+=static(settings.STATIC_URL,document_root=settings.STATICFILES_DIRS)
 

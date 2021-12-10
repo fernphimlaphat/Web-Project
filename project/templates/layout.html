@@ -143,14 +143,11 @@
                                 <a  class="nav-link text-light dropdown-toggle"
                                 href="" data-toggle="dropdown">Menu</a>
                                 <ul class="dropdown-menu">
+
                                   <li><a href="/menu" class="dropdown-item">เมนูแนะนำ</a></li>
-                                  <li><a href="menu2.html" class="dropdown-item">สเต็กเนื้อ</a></li>
-                                  <li><a href="menu3.html" class="dropdown-item">สเต็กไก่</a></li>
-                                  <li><a href="menu4.html" class="dropdown-item">สเต็กหมู</a></li>
-                                  <li><a href="menu5.html" class="dropdown-item">สเต็กปลา</a></li>
-                                  <li><a href="menu6.html" class="dropdown-item">เมนูทานเล่น</a></li>
-                                  <li><a href="menu7.html" class="dropdown-item">ไอศกรีม</a></li>
-                                  <li><a href="menu8.html" class="dropdown-item">เครื่องดื่ม</a></li>
+                                  {% for category in links%}
+                                  <li><a href="{{category.get_url}}" class="dropdown-item">{{category.name}}</a></li>
+                                  {% endfor %}
                                 </ul>
                             </li>
 

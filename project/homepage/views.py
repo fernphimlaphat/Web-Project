@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
 from .models import Menu
@@ -58,10 +58,17 @@ def counter(request):
     amount_of_text = len(text.split())
     return render(request,'counter.html',{'count': amount_of_text})
 
-def menu(request):
+def menu(request,category_slug=None):
     products = None
-    products = Product.objects.all().filter(available=True)
-    return render(request,'menu.html',{'products' : products})
+    category_page=None
+
+    if category_slug != None:
+        category_page = get_object_or_404(Category,slug=category_slug)
+        products = Product.objects.all().filter(category=category_page,available=True)
+    else:
+        products = Product.objects.all().filter(available=True)
+        
+    return render(request,'menu.html',{'products' : products,'category':category_page})
 
 def registerForm(request): 
     return render(request,'register.html')
@@ -116,7 +123,6 @@ def addUser(request):
       else :
           messages.info(request,'กรอกข้อมูลไม่ครบ') 
           return redirect('/registerForm')
-
 
 def loginForm(request):
     return render(request,'login.html')
