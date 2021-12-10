@@ -70,7 +70,7 @@ def menu(request,category_slug=None):
         products = Product.objects.all().filter(available=True)
     
     #n / 12 = หน้า
-    paginator=Paginator(products,4)
+    paginator=Paginator(products,6)
     try:
         page=int(request.GET.get('page','1'))
     except:
