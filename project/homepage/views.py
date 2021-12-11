@@ -2,10 +2,13 @@ from django.shortcuts import render,redirect,get_object_or_404,redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from .models import Menu
-from homepage.models import Category,Product,Cart,CartItem
+from homepage.models import Category,Product,Cart,CartItem,OrderItem,Order
 from django.core.paginator import Paginator,EmptyPage,InvalidPage
 from django.contrib.auth.models import User,auth
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+import stripe
+from django.views.decorators.csrf import csrf_exempt
 
 
 
@@ -136,35 +139,28 @@ def removeCart(request,product_id):
     cartItem.delete()
     return redirect('cartdetail')
 
-def cartdetail(request):
-    total=0
-    counter=0
-    TimeCook=0
-    Hour=0
-    Min=0
-    cart_items=None
-    try:
-        cart=Cart.objects.get(cart_id=_cart_id(request)) #ดึงตะกร้า
-        cart_items=CartItem.objects.filter(cart=cart,active=True) #ดึงข้อมูลสินค้าในตะกร้า
-        for item in cart_items:
-            total+=(item.product.price*item.quantity)
-            counter+=item.quantity
-            TimeCook+=item.product.TimeCook
-            Hour=TimeCook//60
-            Min=TimeCook%60
 
-    except Exception as e :
-        pass
-
-    return render(request,'cartdetail.html',
-    dict(cart_items=cart_items,total=total,counter=counter,TimeCook=TimeCook,Hour=Hour,Min=Min
-    ))
 
 def registerForm(request): 
     return render(request,'register.html')
 
 def orderHistory(request):
-    return render(request,'orderHistory.html')
+    if request.user.is_authenticated:
+        email=str(request.user.email)
+        orders=Order.objects.filter(email=email)
+    return render(request,'orderHistory.html',{'orders':orders})
+
+
+def viewOrder(request,order_id):
+    if request.user.is_authenticated:
+        email=str(request.user.email)
+        order=Order.objects.get(email=email,id=order_id)
+        orderitem=OrderItem.objects.filter(order=order)
+    return render(request,'order-information.html',{'order': order, 'order_items': orderitem})
+
+
+def thankyou(request):
+    return render(request,'thankyou.html')
 
 def orderInfo(request):
     return render(request,'orderInfo.html')
@@ -247,3 +243,86 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('/')
+
+
+@csrf_exempt
+def cartdetail(request):
+    total=0
+    counter=0
+    TimeCook=0
+    Hour=0
+    Min=0
+    cart_items=None
+    try:
+        cart=Cart.objects.get(cart_id=_cart_id(request)) #ดึงตะกร้า
+        cart_items=CartItem.objects.filter(cart=cart,active=True) #ดึงข้อมูลสินค้าในตะกร้า
+        for item in cart_items:
+            total+=(item.product.price*item.quantity)
+            counter+=item.quantity
+            TimeCook+=(item.product.TimeCook * item.quantity)
+            Hour=TimeCook//60
+            Min=TimeCook%60
+
+    except Exception as e :
+        pass
+
+    stripe.api_key=settings.SECRET_KEY
+    stripe_total=int(total*100)
+    description="Payment Online"
+    data_key=settings.PUBLIC_KEY
+
+    if request.method=="POST":
+        try :
+            token=request.POST['stripeToken']
+            email=request.POST['stripeEmail']
+            name=request.POST['stripeBillingName']
+            address=request.POST['stripeBillingAddressLine1']
+            city=request.POST['stripeBillingAddressCity']
+            postcode=request.POST['stripeShippingAddressZip']
+            customer=stripe.Customer.create(
+                email=email,
+                source=token
+            )
+            # print(request.POST)
+            charge=stripe.Charge.create(
+                amount=stripe_total,
+                currency='thb',
+                description=description,
+                customer=customer.id
+            )
+            #บันทึกข้อมูลใบสั่งซื้อ
+            order=Order.objects.create(
+                name=name,
+                address=address,
+                city=city,
+                postcode=postcode,
+                total=total,
+                email=email,
+                token=token
+            )
+            order.save()
+
+             #บันทึกรายการสั่งซื้อ
+            for item in cart_items :
+                order_item=OrderItem.objects.create(
+                    product=item.product.name,
+                    quantity=item.quantity,
+                    price=item.product.price,
+                    order=order
+                )
+                order_item.save()
+                #ลดจำนวน Stock
+                product=Product.objects.get(id=item.product.id)
+                product.stock=int(item.product.stock-order_item.quantity)
+                product.save()
+                item.delete()
+
+        except stripe.error.CardError as e :
+            return False , e
+
+    return render(request,'cartdetail.html',
+    dict(cart_items=cart_items,total=total,counter=counter,TimeCook=TimeCook,Hour=Hour,Min=Min,
+    data_key=data_key,
+    stripe_total=stripe_total,
+    description=description
+    ))

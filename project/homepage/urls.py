@@ -18,11 +18,14 @@ urlpatterns = [
   path('addUser',views.addUser),
   path('loginForm/',views.loginForm),
   path('login',views.login),
-  path('orderHistory/',views.orderHistory),
   path('orderInfo/',views.orderInfo),
   path('thanks/',views.thanks),
   path('test/',views.loginForm),
-  path('logout/',views.logout)
+  path('logout/',views.logout),
+
+  path('orderHistory/',views.orderHistory,name="orderHistory"),
+  path('order/<int:order_id>',views.viewOrder,name="orderDetails"),
+  path('cart/thankyou',views.thankyou,name='thankyou')
 ] 
 
 

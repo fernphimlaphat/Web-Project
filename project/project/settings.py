@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'homepage',
-    'django.contrib.humanize'
+    'django.contrib.humanize',
+    'stripe'
 ]
 
 MIDDLEWARE = [
@@ -139,4 +140,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+PUBLIC_KEY='pk_test_r2dYxQlEJAH2Yaju0FpjaLFh00Czf7rikm'
+SECRET_KEY='sk_test_0OrbYa5WSMIqS8kcgydVDElb005aO63HUA'

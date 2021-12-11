@@ -1,11 +1,13 @@
 {% extends 'layout.html' %}
 {% load static %}
-
+{% load humanize %}
 
 {% block content %}
 
         <!-- ================= เนื้อหา ============================ -->
         <div class = "container">
+            <h1 class="text-white">.</h1>
+
           <section>
                      <!-- Main Container  -->
           <div class="main-container container ">
@@ -22,12 +24,9 @@
                           </thead>
                           <tbody>
                               <tr>
-                                  <td style="width: 50%;" class="text-left"> <b>Order ID:</b> #214521
+                                  <td style="width: 50%;" class="text-left"> <b>Order ID:</b> {{order.id}}
                                       <br>
-                                      <b>Date Added:</b> 20/06/2016</td>
-                                  <td style="width: 50%;" class="text-left"> <b>Payment Method:</b> Cash On Delivery
-                                      <br>
-                                      <b>Shipping Method:</b> Flat Shipping Rate </td>
+                                      <b>Date Added:</b> {{order.created | date:"d M Y"}} </td>
                               </tr>
                           </tbody>
                       </table>
@@ -35,21 +34,14 @@
                           <thead>
                               <tr>
                                   <td style="width: 50%; vertical-align: top;" class="text-left">Payment Address</td>
-                                  <td style="width: 50%; vertical-align: top;" class="text-left">Shipping Address</td>
                               </tr>
                           </thead>
                           <tbody>
                               <tr>
-                                  <td class="text-left">Jhone Cary
-                                      <br>Central Square
-                                      <br>22 Hoi Wing Road
-                                      <br>New Delhi
-                                      <br>India</td>
-                                  <td class="text-left">Jhone Cary
-                                      <br>Central Square
-                                      <br>22 Hoi Wing Road
-                                      <br>New Delhi
-                                      <br>India</td>
+                                  <td class="text-left">{{order.name}}
+                                      <br>{{order.address}}
+                                      <br>{{order.city}}
+                                      <br>{{order.postcode}}
                               </tr>
                           </tbody>
                       </table>
@@ -66,38 +58,34 @@
                                   </tr>
                               </thead>
                               <tbody>
+                                {% for item in order_items%}
                                   <tr>
-                                      <td class="text-left">iPhone5 </td>
-                                      <td class="text-left">product 11</td>
-                                      <td class="text-right">1</td>
-                                      <td class="text-right">$123.20</td>
-                                      <td class="text-right">$123.20</td>
+                                      <td class="text-left">{{item.product}}</td>
+                                      <td class="text-right">{{item.quantity}}</td>
+                                      <td class="text-right">{{item.price}}</td>
+                                      <td class="text-right">{{item.sub_total | intcomma}}</td>
                                       <td style="white-space: nowrap;" class="text-right "> <a class="Yellow"
                                               title="" data-toggle="tooltip" href="#" data-original-title="Reorder"><i
                                                   class="fa fa-shopping-cart"></i></a>
                                                   
                                       </td>
                                   </tr>
+                                {% endfor %}
   
                               </tbody>
+
                               <tfoot>
                                   <tr>
                                       <td colspan="3"></td>
-                                      <td class="text-right"><b>Sub-Total</b>
+                                      <td class="text-right"><b>Total:</b>
                                       </td>
-                                      <td class="text-right">$101.00</td>
-                                      <td></td>
-                                  </tr>
-                                  <tr>
-                                      <td colspan="3"></td>
-                                      <td class="text-right"><b>Total</b>
-                                      </td>
-                                      <td class="text-right">$133.20</td>
+                                      <td class="text-right">{{order.total | intcomma}}฿</td>
                                       <td></td>
                                   </tr>
                               </tfoot>
                           </table>
                       </div>
+
                       <button class="btn-secondary Yellow pull-right" onclick="window.print();">
                           <i class="fas fa-print"></i>
                           ปริ้นใบสั่งซื้อ
