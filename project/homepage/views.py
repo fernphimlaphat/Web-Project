@@ -5,6 +5,7 @@ from .models import Menu
 from homepage.models import Category,Product,Cart,CartItem
 from django.core.paginator import Paginator,EmptyPage,InvalidPage
 from django.contrib.auth.models import User,auth
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -91,6 +92,7 @@ def _cart_id(request):
         cart=request.session.create()
     return cart
 
+@login_required(login_url='/loginForm')
 def addCart(request,product_id):
     #ดึงสินค้าที่เราซื้อมาใช้งาน
     product=Product.objects.get(id=product_id)

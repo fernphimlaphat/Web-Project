@@ -159,9 +159,14 @@
                             </li>
 
                             {% if user.is_authenticated %}
-                              <li class="nav-item">
+                            <a class="nav-link text-light " data-toggle="dropdown">
+                              Hello, {{user.username}} <i class="fas fa-user circle"></i>
+                            </a>
+
+                              <!-- <li class="nav-item">
                                 <a class="nav-link text-light" href="#">Hello, {{user.username}}</a>
-                              </li>  
+                              </li>   -->
+
                               <li class="nav-item">
                                 <a class="nav-link text-light" href="/logout">logout<i class="fas fa-sign-out-alt"></i>
                                 </a>
