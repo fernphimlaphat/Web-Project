@@ -42,8 +42,6 @@ class Queue:
     def show(self):
         return self.lst
 
-class sorting:
-    pass
 #================= END Class ================= 
 
 
