@@ -1,0 +1,134 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+{% load humanize %}
+
+
+        <!-- ================= เนื้อหา ============================ -->
+
+        <div class = "container">
+            <h1>รายการสินค้า</h1>
+            <h2> </h2>
+
+        {% if not cart_items%}
+        <h1 class="text-white ">.</h1>
+        <h1 class="text-white ">.</h1>
+
+        <div class="jumbotron my-4">
+            <h1 class="display-4">ไม่มีรายการที่สั่งซื้อ!</h1>
+              <a class="w3-bar-item w3-button w3-yellow w3-hover-deep-orange w3-hover-shadow w3-hover-text-white" href="/menu" role="button">ซื้อสินค้าเพิ่มเติม</a>
+            </p>
+        </div>
+        <h2 class="text-white ">.</h2>
+        <h2 class="text-white ">.</h2>
+        <h2 class="text-white ">.</h2>
+        <h2 class="text-white ">.</h2>
+
+
+        {%else%}
+        <section>
+            <div class="row WRAPPER">
+              <!--Middle Part Start-->
+              <div id="content" class="col-sm-12">
+                  <h2 class="title">Shopping Cart</h2>
+                  <div class="table-responsive form-group">
+                      <table class="table table-bordered">
+                          <thead>
+                              <tr>
+                                  <td class="text-center">Image</td>
+                                  <td class="text-center">Product Name</td>
+                                  <td class="text-center">Quantity</td>
+                                  <td class="text-right">Unit Price</td>
+                                  <td class="text-right">Total</td>
+                              </tr>
+                          </thead>
+                          <tbody>
+                            {% for item in cart_items %}
+
+                              <tr>
+                                  <td class="text-center">
+                                      <p href="#"><img width="150px"
+                                              src="{{item.product.image.url}}"
+                                              alt="Aspire Ultrabook Laptop" title="Aspire Ultrabook Laptop" 
+                                              class="img-thumbnail" />
+                                      </p>
+                                 </td>
+
+                                  <td class="text-left"><p href="#">{{item.product.name}}</p><br /></td>
+                                  <td class="text-left " width="200px">
+                                      <div class="input-group btn-block quantity">
+                                          
+                                        
+                                              <p class="cart_quantity" ><i class="text-white">..........</i>{{item.quantity}}</p>
+
+                                              
+                                          <span class="input-group-btn">
+                                   
+                                                  <button type="button" data-toggle="tooltip" title="Remove"
+                                                   class="red cart_quantity_delete"  >
+                                                    <a class="cart_quantity_delete" onclick="return confirm('คุณต้องการลบสินค้าออกจากตะกร้าหรือไม่ ?')" href="{% url 'removeCart' item.product.id %}"><i class="fa fa-times"></i></a>
+                                                 </button>
+
+                                          </span>
+                                        </div>
+                                  </td>
+                                  <td class="text-right">{{item.product.price|intcomma}}</td>
+                                  <td class="text-right">{{item.sub_total|intcomma}}</td>
+                              </tr>
+                              {%endfor%}
+                          </tbody>
+                      </table>
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-4 col-sm-offset-8">
+                          <table class="table table-bordered">
+                              <tbody>
+                                  <tr>
+                                    <tr>
+                                        <td class="text-center">
+                                            <strong>Counter:</strong>
+                                        </td>
+
+                                        <td class="text-right text-center">{{counter|intcomma}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="text-right text-center">
+                                            <strong >Total:</strong>
+                                        </td>
+                                        <td class="text-right">{{total|intcomma}}฿</td>
+                                    </tr>
+
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+
+                  <div class="buttons">
+                      <div class="pull-right"><a href="checkout.html" >  <form class="" action="" method="POST">
+                          <script src="https://checkout.stripe.com/checkout.js"
+                          class="stripe-button"
+                          data-key="{{ data_key }}"
+                          data-amount="{{ stripe_total }}"
+                          data-name="Rock with U"
+                          data-description="{{ description }}"
+                          data-locale="thailand"
+                          data-currency="thb"
+                          data-shipping-address="true"
+                          data-billing-address="true"
+                          data-zip-code="true">
+                          </script>
+                      </form></a></div>
+                  </div>
+
+              </div>         
+        </section>    
+        {%endif%}
+
+
+              
+            
+        </div>
+        
+{% endblock %}

@@ -5,6 +5,7 @@
 {% block content %}
 
 
+
         <div class="w3-content" style="max-width:2000px;margin-top:50px">
 
           <!-- Automatic Slideshow Images -->
@@ -39,58 +40,31 @@
               <picture class="position-relative z-index-10">
                   <img class="w-100 rounded" src="{% static '/images/drive-download-20211118T104030Z-001/gangster04.jpg' %}" alt="HTML Bootstrap Template by Pixel Rocket">
               </picture>
+
+              
               <div class="card-overlay">
-                  <p class="lead fw-bolder mb-2">เมนูแนะนำ</p>
-                  <a href="./category.html" class="w3-bar-item w3-button w3-hover-yellow" role="button">เพิ่มลงตระกร้า</a>
+                  <a href="/menu" class="w3-bar-item w3-button w3-hover-yellow" role="button">เมนูทั้งหมด</a>
               </div>
+
               
           </div>
+          
           <div class="col-12 col-xl-6" data-aos="fade-left">
               <div class="row g-4 justify-content-end">
+
+              {% for category in links %}
                   <div class="col-12 col-md-6 d-flex">
-                      <div class="card position-relative overflow-hidden">
-                          <picture class="position-relative z-index-10 d-block bg-light">
-                              <img class="w-100 rounded" src="{% static '/images/drive-download-20211118T104030Z-001/Steak_fish02.jpg' %}" alt="HTML Bootstrap Template by Pixel Rocket">
-                          </picture>
+                      <div class="">
+                          <!-- <picture class="position-relative z-index-10 d-block bg-light">
+                              <img class="w-100 rounded" src="{{product.image.url}}">
+                          </picture> -->
                           <div class="card-overlay">
-                              <p class="lead fw-bolder mb-2">เมนูใหม่</p>
-                              <a href="ลิ้งไปหน้าเมนู./category.html" class="w3-bar-item w3-button w3-hover-yellow" role="button">เพิ่มลงตระกร้า</a>
+                              <a href="{{category.get_url}}" class="w3-bar-item w3-button w3-hover-yellow" role="button">{{category.name}}</a>
                           </div>
                       </div>
                   </div>
-                  <div class="col-12 col-md-6 d-flex">
-                      <div class="card position-relative overflow-hidden">
-                          <picture class="position-relative z-index-10 d-block bg-light">
-                              <img class="w-100 rounded" src="{% static '/images/drive-download-20211118T104030Z-001/Steak_chicken02.jpg' %}" alt="HTML Bootstrap Template by Pixel Rocket">
-                          </picture>
-                          <div class="card-overlay">
-                              <p class="lead fw-bolder mb-2">สเต็กไก่</p>
-                              <a href="ลิ้งหน้าเมนู./category.html" class="w3-bar-item w3-button w3-hover-yellow" role="button">เพิ่มลงตระกร้า</a>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-12 col-md-6 d-flex">
-                      <div class="card position-relative overflow-hidden">
-                          <picture class="position-relative z-index-10 d-block bg-light">
-                              <img class="w-100 rounded" src="{% static '/images/drive-download-20211118T104030Z-001/Steak_pock02.jpg' %}" alt="HTML Bootstrap Template by Pixel Rocket">
-                          </picture>
-                          <div class="card-overlay">
-                              <p class="lead fw-bolder mb-2">สเต็กหมู</p>
-                              <a href="ลิ้งหน้าเมนู./category.html" class="w3-bar-item w3-button w3-hover-yellow" role="button">เพิ่มลงตระกร้า</a>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-12 col-md-6 d-flex">
-                      <div class="card position-relative overflow-hidden">
-                          <picture class="position-relative z-index-10 d-block bg-light">
-                              <img class="w-100 rounded" src="{% static '/images/drive-download-20211118T104030Z-001/Steak_beef04.jpg' %}" alt="HTML Bootstrap Template by Pixel Rocket">
-                          </picture>
-                          <div class="card-overlay">
-                              <p class="lead fw-bolder mb-2">สเต็กเนื้อ</p>
-                              <a href="ลิ้งหน้าเมนู./category.html" class="w3-bar-item w3-button w3-hover-yellow" role="button">เพิ่มลงตระกร้า</a>
-                          </div>
-                      </div>
-                  </div>
+              {% endfor %}
+
               </div>
           </div>
       </div>
