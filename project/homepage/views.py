@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect,get_object_or_404,redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from .models import Menu
@@ -81,7 +81,7 @@ def menu(request,category_slug=None):
     except (EmptyPage,InvalidPage):
         productperPage=paginator.page(paginator.num_pages)
         
-    return render(request,'menu.html',{'products' : productperPage,'category':category_page})
+    return render(request,'menu.html',{'products' : productperPage,'category':category_page ,})
 
 #id สินค้า เพื่อตัวแปรในการส่งข้อมูล
 def _cart_id(request):
@@ -123,6 +123,32 @@ def addCart(request,product_id):
         cart_item.save()
     return redirect('cartdetail')
 
+def removeCart(request,product_id):
+    #ทำงานกับตะกร้าสินค้า id นั้นๆ
+    cart=Cart.objects.get(cart_id=_cart_id(request))
+    #ทำงานกับสินค้าที่จะลบ
+    product=get_object_or_404(Product,id=product_id)
+    cartItem=CartItem.objects.get(product=product,cart=cart)
+    #ลบรายการสินค้า 1 ออกจากตะกร้า A โดยลบจาก รายการสินค้าในตะกร้า (CartItem)
+    cartItem.delete()
+    return redirect('cartdetail')
+
+def cartdetail(request):
+    total=0
+    counter=0
+    cart_items=None
+    try:
+        cart=Cart.objects.get(cart_id=_cart_id(request)) #ดึงตะกร้า
+        cart_items=CartItem.objects.filter(cart=cart,active=True) #ดึงข้อมูลสินค้าในตะกร้า
+        for item in cart_items:
+            total+=(item.product.price*item.quantity)
+            counter+=item.quantity
+    except Exception as e :
+        pass
+
+    return render(request,'cartdetail.html',
+    dict(cart_items=cart_items,total=total,counter=counter
+    ))
 
 def registerForm(request): 
     return render(request,'register.html')
@@ -237,4 +263,9 @@ def cartDetails(request):
     return render(request,'cartDetails.html')
 
 def thanks(request):
+
     return render(request,'thanks.html')
+
+def search(request):
+    products=Product.objects.filter(name__contains=request.GET['title'])
+    return render(request,'menu.html',{'products':products})

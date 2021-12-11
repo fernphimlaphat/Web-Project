@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load humanize %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -108,11 +108,12 @@
                     <div class="collapse navbar-collapse" id="navbarCollapse">
 
                         <ul class="navbar-nav mr-auto">
-                            
-                        <div class="search-box">
-                            <input type="text" placeholder="Type to search..">
-                            <div class="search-icon">
-                                <i class="fas fa-search"></i>
+                        
+                        <form action="{% url 'search' %}", method="GET">
+                          <div class="search-box">
+                            <input type="text" name="title" class="form-control" placeholder="Type to search..">
+                            <div type="submit" class="search-icon" >
+                                <i  class="fas fa-search"></i>
                             </div>
                             <div class="cancel-icon">
                                 <i class="fas fa-times"></i>
@@ -120,6 +121,8 @@
                             <div class="search-data">
                             </div>
                         </div>
+                        </form>
+                      
 
                             <li class="nav-item dropdown">
                                   <a class="nav-link text-light dropdown-toggle" data-toggle="dropdown">
@@ -132,7 +135,11 @@
                         
 
                             <li class="nav-item">
-                                <a class="nav-link" id="image-cart" href="/cartDetails"><i class="fa fa-shopping-cart fa-2x"></i></a>
+                                <a class="nav-link" id="image-cart" href="/cartdetail"><i class="fa fa-shopping-cart fa-2x"></i>{% if item_count > 0 %}
+                              {{item_count}}
+                              {% else %}
+                                0
+                              {% endif %}</a>
                             </li>
 
                             <li class="nav-item">
@@ -191,7 +198,6 @@
     
     <footer class="footer-32892 pb-0">
         <div class="site-section">
-          <div class="container">
   
             
             <div class="row">
@@ -214,7 +220,7 @@
                 </div>
               </div>      
             </div>
-          </div>
+
         </div>
     </footer>
 
@@ -289,6 +295,7 @@ searchInput.value = "";
         }
       }
     </script>
+    
         <script src="{% static 'js/vendor/bootstrap/js/popper.js' %}"></script>
         <script src="{% static 'js/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
         <script src="{% static 'js/vendor/select2/select2.min.js' %}"></script>

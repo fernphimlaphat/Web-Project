@@ -7,6 +7,22 @@
 
 <div class = "container">
   <section>
+    {% if not products%}
+    <h1 class="text-white ">.</h1>
+    <h1 class="text-white ">.</h1>
+    <h1 class="text-white ">.</h1>
+
+
+    <div class="jumbotron my-4">
+        <h1 class="display-4">ไม่มีรายการที่ค้นหา!</h1>
+          <a class="w3-bar-item w3-button w3-yellow w3-hover-deep-orange w3-hover-shadow w3-hover-text-white" href="/index" role="button">หน้าแรก</a>
+        </p>
+    </div>
+    <h2 class="text-white ">.</h2>
+    <h2 class="text-white ">.</h2>
+    <h2 class="text-white ">.</h2>
+    <h2 class="text-white ">.</h2>
+    {%else%}
                <!-- !PAGE CONTENT! -->
     <div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px">
     
@@ -24,7 +40,7 @@
             {% if product.stock <= 0 %}
             <p href="#" class="w3-text-red w3-bar-item w3-button w3-hover-red w3-animate-zoom">รายการหมด</p>
             {% else %}
-            <a href="#" class="w3-bar-item w3-button w3-hover-yellow w3-animate-zoom">เพิ่มลงตระกร้า</a>
+            <a href="{%url 'addCart' product.id %}" class="w3-bar-item w3-button w3-hover-yellow w3-animate-zoom">เพิ่มลงตระกร้า</a>
             {% endif %}
   
           </div>
@@ -50,7 +66,7 @@
         </div>
         {% endif %}
       </div>
-      
+    {%endif%}
   </section>
   </div>     
 
