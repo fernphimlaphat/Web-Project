@@ -136,6 +136,8 @@ def removeCart(request,product_id):
 def cartdetail(request):
     total=0
     counter=0
+    TimeCook=0
+    
     cart_items=None
     try:
         cart=Cart.objects.get(cart_id=_cart_id(request)) #ดึงตะกร้า
@@ -143,11 +145,13 @@ def cartdetail(request):
         for item in cart_items:
             total+=(item.product.price*item.quantity)
             counter+=item.quantity
+            TimeCook+=item.product.TimeCook
+
     except Exception as e :
         pass
 
     return render(request,'cartdetail.html',
-    dict(cart_items=cart_items,total=total,counter=counter
+    dict(cart_items=cart_items,total=total,counter=counter,TimeCook=TimeCook
     ))
 
 def registerForm(request): 
