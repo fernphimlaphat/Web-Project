@@ -32,6 +32,7 @@ class Product(models.Model):
     price=models.DecimalField(max_digits=10,decimal_places=2)
     category=models.ForeignKey(Category,on_delete=models.CASCADE)
     image=models.ImageField(upload_to="product",blank=True)
+    timeCook=models.IntegerField()
     stock=models.IntegerField()
     TimeCook=models.IntegerField()
     available=models.BooleanField(default=True)
@@ -42,7 +43,11 @@ class Product(models.Model):
         return self.name
     
     class Meta :
+<<<<<<< Updated upstream
         ordering=('category',)
+=======
+        ordering=('price',)
+>>>>>>> Stashed changes
         verbose_name='สินค้า'
         verbose_name_plural="ข้อมูลสินค้า"
     
