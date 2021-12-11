@@ -5,6 +5,10 @@ def menu_links(request):
     links=Category.objects.all()
     return dict(links=links)
 
+def menu_linksIndex(request):
+    linksIndex=Category.objects.all()[:4]
+    return dict(linksIndex=linksIndex)
+
 def counter(request):
     item_count=0
     if 'admin' in request.path:

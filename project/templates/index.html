@@ -52,12 +52,12 @@
           <div class="col-12 col-xl-6" data-aos="fade-left">
               <div class="row g-4 justify-content-end">
 
-              {% for category in links %}
+              {% for category in linksIndex%}
                   <div class="col-12 col-md-6 d-flex">
                       <div class="">
-                          <!-- <picture class="position-relative z-index-10 d-block bg-light">
-                              <img class="w-100 rounded" src="{{product.image.url}}">
-                          </picture> -->
+                          <picture class="position-relative z-index-10 d-block bg-light">
+                              <img class="w-100 rounded" src="{{category.image.url}}">
+                          </picture>
                           <div class="card-overlay">
                               <a href="{{category.get_url}}" class="w3-bar-item w3-button w3-hover-yellow" role="button">{{category.name}}</a>
                           </div>
