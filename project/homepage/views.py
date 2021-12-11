@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import Menu
 from homepage.models import Category,Product,Cart,CartItem
 from django.core.paginator import Paginator,EmptyPage,InvalidPage
+from django.contrib.auth.models import User,auth
 
 
 
@@ -160,106 +161,6 @@ def cartdetail(request):
 def registerForm(request): 
     return render(request,'register.html')
 
-def addUser(request): 
-    if request.method == 'POST':
-      checkUser = 0
-      # ================= รับข้อมูลจาก form ใน register.html ================= 
-      firstname = request.POST['firstname']
-      lastname = request.POST['lastname']
-      email = request.POST['email']
-      username = request.POST['username']
-      phone = request.POST['phone']
-      password = request.POST['password']
-      
-      # ================= เช็คการกรอกข้อมูล ================= 
-      if firstname != '' and lastname != '' and email != '' and username != '' and phone != '' and password != '' : 
-
-            # ================= เช็คข้อมูลกับไฟล์ Users ================= 
-            f = open('file/users.txt', 'r', encoding='utf8')
-            s = f.readlines()
-            if s != None:
-                for line in s:
-                  usedEmail = line.split()[2]
-                  usedUsername = line.split()[3]
-                  
-                  if email == usedEmail:
-                     checkUser = 1  # emailซำ้
-                     break
-                  if username == usedUsername:
-                     checkUser = 2 # usernameซำ้
-                     break
-            f.close()      
-
-            if checkUser == 0:
-                f = open('file/login.txt', 'a', encoding='utf8')
-                f.write(f"{username} {password}\n")
-                f.close()
-
-                f = open('file/users.txt', 'a', encoding='utf8')
-                f.write(f"{firstname} {lastname} {email} {username} {phone}\n")
-                f.close()
-                return redirect('/loginForm')
-          
-            else :
-                if checkUser == 1 :
-                  messages.info(request,'email ถูกใช้ไปแล้ว')
-                elif checkUser == 2 :
-                  messages.info(request,'username ถูกใช้ไปแล้ว')
-                return redirect('/registerForm')
-    
-      else :
-          messages.info(request,'กรอกข้อมูลไม่ครบ') 
-          return redirect('/registerForm')
-
-def loginForm(request):
-    return render(request,'login.html')
-
-def login(request):
-    if request.method == 'POST':
-      # ================= รับข้อมูลจาก form ใน login.html ================= 
-      checkLogin = 0
-      username = request.POST['username']
-      password = request.POST['password']
-
-      # ================= เช็คการกรอกข้อมูล ================= 
-      if username != '' and password != '': 
-
-      # ================= เช็คข้อมูลกับไฟล์ login ================= 
-        f = open('file/login.txt', 'r', encoding='utf8')
-        s = f.readlines()
-
-        if s != None:
-          for line in s:
-             realUser = line.split()[0]
-             realPassword = line.split()[1]
-                 
-             if username == realUser:
-                if password == realPassword:
-                    checkLogin = 1
-                    break
-        f.close()            
-        if checkLogin == 1:
-            f = open('file/NowLogin.txt', 'w', encoding='utf8')
-            f.write("True")
-            f.close()
-            return render(request,'test.html',
-            {
-                'checkLogin' : checkLogin,
-                'username' : username
-            })
-        else :
-            messages.info(request,'ไม่มีข้อมูลผู้ใช้')
-            return redirect('/loginForm')
-
-      else :
-         messages.info(request,'กรอกข้อมูลไม่ครบ') 
-         return redirect('/loginForm')
-
-    return render(request,'login.html')
-
-def logout(request): 
-    return render(request,'index.html',{'checkLogin': 0})
-
 def orderHistory(request):
     return render(request,'orderHistory.html')
 
@@ -276,3 +177,71 @@ def thanks(request):
 def search(request):
     products=Product.objects.filter(name__contains=request.GET['title'])
     return render(request,'menu.html',{'products':products})
+
+def addUser(request): 
+    if request.method == 'POST':
+      checkUser = 0
+      # ================= รับข้อมูลจาก form ใน register.html ================= 
+      firstname = request.POST['firstname']
+      lastname = request.POST['lastname']
+      email = request.POST['email']
+      username = request.POST['username']
+      phone = request.POST['phone']
+      password = request.POST['password']
+      
+      # ================= เช็คการกรอกข้อมูล ================= 
+      if firstname != '' and lastname != '' and email != '' and username != '' and phone != '' and password != '' : 
+
+            # ================= เช็คข้อมูลกับไฟล์ Users ================= 
+            if User.objects.filter(username=username).exists():
+                messages.info(request,'Username มีคนใช้แล้ว')
+                return redirect('/registerForm')
+            elif User.objects.filter(email=email).exists():
+                messages.info(request,'Email มีคนใช้แล้ว')
+                return redirect('/registerForm')
+            user=User.objects.create_user(
+            username=username,
+            password=password,
+            email=email,
+            first_name=firstname,
+            last_name=lastname
+            )
+            user.save()
+            return redirect('/loginForm')
+    
+      else :
+          messages.info(request,'กรอกข้อมูลไม่ครบ') 
+          return redirect('/registerForm')
+
+def loginForm(request):
+    return render(request,'login.html')
+
+def login(request):
+    if request.method == 'POST':
+      # ================= รับข้อมูลจาก form ใน login.html ================= 
+      username = request.POST['username']
+      password = request.POST['password']
+      
+      # ================= เช็คการกรอกข้อมูล ================= 
+      if username != ''and password != '' : 
+          
+        # ================= เช็ค login ================= 
+        user=auth.authenticate(username=username,password=password)
+        
+        if user is not None:
+            auth.login(request,user)
+            return redirect('/')
+        else:
+            messages.info(request,'ไม่พบข้อมูล')  
+            return redirect('/loginForm')
+        
+    
+      else :
+         messages.info(request,'กรอกข้อมูลไม่ครบ') 
+         return redirect('/loginForm')
+
+    return render(request,'login.html')
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
