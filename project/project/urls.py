@@ -32,8 +32,9 @@ urlpatterns = [
     path('logout/',include('homepage.urls')),
     path('orderHistory/',include('homepage.urls')),
     path('orderInfo/',include('homepage.urls')),
-    path('thanks/',include('homepage.urls')),
+    path('thankyou/',include('homepage.urls')),
     path('test/',include('homepage.urls')),
+    path('loginHistory/',include('homepage.urls'))
 
 ]
 

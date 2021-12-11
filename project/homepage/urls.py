@@ -22,10 +22,10 @@ urlpatterns = [
   path('thanks/',views.thanks),
   path('test/',views.loginForm),
   path('logout/',views.logout),
-
   path('orderHistory/',views.orderHistory,name="orderHistory"),
   path('order/<int:order_id>',views.viewOrder,name="orderDetails"),
-  path('cart/thankyou',views.thankyou,name='thankyou')
+  path('cart/thankyou',views.thankyou,name='thankyou'),
+  path('loginHistory/',views.loginHistory)
 ] 
 
 

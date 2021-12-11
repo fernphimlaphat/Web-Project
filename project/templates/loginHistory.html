@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+    <div class = "container">
+        <section>
+                   <!-- Main Container  -->
+        <div class="main-container container ">
+            <div class="row WRAPPER_OrderInfo">
+                <!--Middle Part Start-->
+                <div id="content" class="col-sm-9">
+                    <h2 class="title">Login History</h2>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in rows %}
+                                <tr>
+                                    <td>{{ row }}</td>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+        </div>
+        <!-- //Main Container -->
+
+        </section>
+        
+    </div>
+
+
+{% endblock %} 

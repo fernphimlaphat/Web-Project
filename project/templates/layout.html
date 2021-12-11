@@ -122,6 +122,18 @@
                             </div>
                         </div>
                         </form>
+
+                        {% if user.is_superuser == 1 %}
+                        <li class="nav-item dropdown">
+                              <a class="nav-link text-light dropdown-toggle" data-toggle="dropdown">
+                                <i class="fas fa-user circle"></i>
+                              </a>
+                              <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/loginHistory">ประวัติการเข้าระบบ</a>
+                              </div>
+                            </li>
+                        {% endif %}
+
                             <li class="nav-item">
                                 <a class="nav-link" id="image-cart" href="/cartdetail"><i class="fa fa-shopping-cart fa-2x"></i>{% if item_count > 0 %}
                               {{item_count}}
@@ -207,7 +219,7 @@
               <div class="col-md pr-md-5 mb-4 mb-md-0">
                 <h3>Contract Us</h3>
                 <ul class="list-unstyled quick-info mb-4">
-                  <li ><a class="d-flex align-items-center"><span class="icon mr-3 icon-phone"></span>Phine No. : 03x-xxx-xx17</a></li>
+                  <li ><a class="d-flex align-items-center"><span class="icon mr-3 icon-phone text-body"></span>Phone No. : 03x-xxx-xx17</a></li>
                   <li ><a class="d-flex align-items-center"><span class="icon mr-3 icon-envelope"></span>line : @RockWithU</a></li>
                 </ul>
               </div>

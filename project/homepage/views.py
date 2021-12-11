@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 import stripe
 from django.views.decorators.csrf import csrf_exempt
+import datetime
 
 
 
@@ -228,6 +229,13 @@ def login(request):
         
         if user is not None:
             auth.login(request,user)
+            timeLogin=datetime.datetime.now()
+            timeStr=Queue()
+            timeStr.enqueue(timeLogin.strftime("%x"))
+            timeStr.enqueue(timeLogin.strftime("%X"))
+            f = open('file/loginHistory.txt', 'a', encoding='utf8')
+            f.write(f"{username} {timeStr.dequeue()} {timeStr.dequeue()} \n")
+            f.close()
             return redirect('/')
         else:
             messages.info(request,'ไม่พบข้อมูล')  
@@ -244,6 +252,16 @@ def logout(request):
     auth.logout(request)
     return redirect('/')
 
+def loginHistory(request):
+    f = open('file/LoginHistory.txt', 'r', encoding='utf8')
+    s = f.readlines()
+    loginDetail=[]
+    if s != None:
+        for line in s:
+           loginDetail.append(line)
+    f.close()    
+
+    return render(request,'loginHistory.html',{'rows':loginDetail})
 
 @csrf_exempt
 def cartdetail(request):
