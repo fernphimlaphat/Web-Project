@@ -9,14 +9,11 @@ urlpatterns = [
   path('counter/',views.counter),
   path('menu/',views.menu),
   path('',views.menu,name="AllMenu"),
-
   path('category/<slug:category_slug>',views.menu,name="product_by_category"),
   path('cart/add/<int:product_id>',views.addCart,name="addCart"),
   path('cartdetail/',views.cartdetail,name="cartdetail"),
   path('cart/remove/<int:product_id>',views.removeCart,name="removeCart"),
-  
   path('search/',views.search,name='search'),
-
   path('registerForm/',views.registerForm),
   path('addUser',views.addUser),
   path('loginForm/',views.loginForm),

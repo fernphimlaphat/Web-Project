@@ -33,7 +33,6 @@ class Product(models.Model):
     category=models.ForeignKey(Category,on_delete=models.CASCADE)
     image=models.ImageField(upload_to="product",blank=True)
     stock=models.IntegerField()
-    TimeCook=models.IntegerField()
     available=models.BooleanField(default=True)
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now=True)
@@ -42,7 +41,7 @@ class Product(models.Model):
         return self.name
     
     class Meta :
-        ordering=('category',)
+        ordering=('name',)
         verbose_name='สินค้า'
         verbose_name_plural="ข้อมูลสินค้า"
     
