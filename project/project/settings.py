@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-fngh&uilq5lq-wog4%i9ych9%zys0e6nl8dcb%98e6hznyv3xm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1','projectrockwithu.herokuapp.com']
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = os.path.join(BASE_DIR,'static')
