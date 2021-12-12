@@ -140,8 +140,6 @@ def removeCart(request,product_id):
     cartItem.delete()
     return redirect('cartdetail')
 
-
-
 def registerForm(request): 
     return render(request,'register.html')
 
@@ -157,17 +155,12 @@ def viewOrder(request,order_id):
         email=str(request.user.email)
         order=Order.objects.get(email=email,id=order_id)
         orderitem=OrderItem.objects.filter(order=order)
-    return render(request,'order-information.html',{'order': order, 'order_items': orderitem})
+        dateOrder=OrderItem.objects.create
+    return render(request,'order-information.html',{'order': order, 'order_items': orderitem , 'dateOrder' :dateOrder})
 
 
 def thankyou(request):
     return render(request,'thankyou.html')
-
-def orderInfo(request):
-    return render(request,'orderInfo.html')
-
-def cartDetails(request):
-    return render(request,'cartDetails.html')
 
 def thanks(request):
 
@@ -301,7 +294,6 @@ def cartdetail(request):
                 email=email,
                 source=token
             )
-            # print(request.POST)
             charge=stripe.Charge.create(
                 amount=stripe_total,
                 currency='thb',
@@ -320,7 +312,7 @@ def cartdetail(request):
             )
             order.save()
 
-             #บันทึกรายการสั่งซื้อ
+            #บันทึกรายการสั่งซื้อ
             for item in cart_items :
                 order_item=OrderItem.objects.create(
                     product=item.product.name,
@@ -334,9 +326,11 @@ def cartdetail(request):
                 product.stock=int(item.product.stock-order_item.quantity)
                 product.save()
                 item.delete()
+            return redirect('thankyou')
 
         except stripe.error.CardError as e :
             return False , e
+
 
     return render(request,'cartdetail.html',
     dict(cart_items=cart_items,total=total,counter=counter,TimeCook=TimeCook,Hour=Hour,Min=Min,

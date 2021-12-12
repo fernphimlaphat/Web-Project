@@ -39,9 +39,7 @@ urlpatterns = [
     path('orderInfo/',include('homepage.urls')),
     path('thankyou/',include('homepage.urls')),
     path('test/',include('homepage.urls')),
-    path('loginHistory/',include('homepage.urls')),
-    url(r'^media/(?P<path>.*)$', serve,{'document_root':       settings.MEDIA_ROOT}), 
-    url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}), 
+    path('loginHistory/',include('homepage.urls'))
 
 ]
 

@@ -42,7 +42,7 @@
                                       <td class="text-center">Order ID</td>
                                       <!-- <td class="text-center">Qty</td> -->
                                       <!-- <td class="text-center">Status</td> -->
-                                      <td class="text-center">Date Added</td>
+                                      <td class="text-center">Date & Time</td>
                                       <td class="text-right">Total</td>
                                       <td></td>
                                   </tr>
@@ -62,7 +62,7 @@
                                       <td class="text-center">{{item.id}}</td>
                                       <!-- <td class="text-center">1</td> -->
                                       <!-- <td class="text-center">Shipped</td> -->
-                                      <td class="text-center">{{item.created | date:"d M Y"}}</td>
+                                      <td class="text-center">{{item.created}}</td>
                                       <td class="text-right">{{item.total | intcomma}}</td>
                                       <td class="text-center"><a class="Yellow_his" title="" data-toggle="tooltip"
                                               href="{% url 'orderDetails' item.id %}" data-original-title="View"><i
