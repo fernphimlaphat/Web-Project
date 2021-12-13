@@ -44,7 +44,7 @@ class Product(models.Model):
         return self.name
     
     class Meta :
-        ordering=('name',)
+        ordering=('price',)
         verbose_name='สินค้า'
         verbose_name_plural="ข้อมูลสินค้า"
     
